@@ -3,17 +3,159 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FurSpot - 열려있는 파티</title>
+  <title>FurSpot - 프라이빗 모임 & 스터디룸 매칭</title>
+  <!-- Tailwind CSS & React 라이브러리 CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-gradient-to-br from-sky-50 to-emerald-50 min-h-screen flex items-center justify-center p-4">
-  <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl text-center max-w-md w-full border border-sky-100">
-    <div class="text-4xl mb-3">🩵🐾</div>
-    <h1 class="text-2xl font-black text-sky-600 mb-2">FurSpot 접속 완료!</h1>
-    <p class="text-slate-600 text-sm mb-6">프루티거 에어로 테마의 프라이빗 모임 매칭 서비스가 성공적으로 연동되었습니다.</p>
-    <div class="bg-sky-50 rounded-2xl p-4 text-sky-700 font-semibold text-sm">
-      ✨ 참가하기 & 길찾기 기능 활성화 준비 완료
-    </div>
-  </div>
+<body class="bg-slate-900 text-slate-800 flex justify-center min-h-screen">
+
+  <div id="root" class="w-full max-w-md bg-gradient-to-b from-sky-200 via-sky-50 to-emerald-100 min-h-screen shadow-2xl relative flex flex-col"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function App() {
+      const [activeTab, setActiveTab] = useState('party');
+      const [showProfile, setShowProfile] = useState(false);
+      const [selectedNavMap, setSelectedNavMap] = useState(null);
+
+      // 모임 데이터
+      const parties = [
+        {
+          id: 1,
+          title: "주안 태평 아파트 프라이빗 타일 스터디 & 모임",
+          tag: "열려있는 파티",
+          location: "인천 미추홀구 주안동 태평아파트 스터디룸",
+          time: "오늘 오후 7:00",
+          members: "3 / 6명",
+          desc: "600x600 타일 시공 노하우와 인테리어 리모델링 아이디어를 자유롭게 공유하는 프루티거 에어로 스타일 열린 파티입니다!",
+          mapUrl: "https://map.naver.com"
+        },
+        {
+          id: 2,
+          title: "주말 그래픽 & 소셜 네트워킹 파티",
+          tag: "자유 참가",
+          location: "인천 미추홀구 석바위로 카페",
+          time: "이번 주 토요일 오후 2:00",
+          members: "5 / 8명",
+          desc: "퍼리 서브컬처 팬아트, 3D 모델링, 자캐 수다 환영! 음료 한 잔과 함께 가볍게 오세요.",
+          mapUrl: "https://map.naver.com"
+        }
+      ];
+
+      return (
+        <div class="flex-1 flex flex-col pb-20">
+          {/* 상단 헤더 (Frutiger Aero 스타일) */}
+          <header class="bg-white/60 backdrop-blur-md sticky top-0 z-10 px-5 py-4 border-b border-white/80 flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-2">
+              <span class="text-2xl">🩵</span>
+              <h1 class="text-xl font-black text-sky-600 tracking-tight">FurSpot</h1>
+            </div>
+            <button 
+              onClick={() => setShowProfile(!showProfile)}
+              class="px-3 py-1.5 bg-gradient-to-r from-sky-400 to-emerald-400 text-white font-bold rounded-full text-xs shadow hover:opacity-90 transition">
+              프로필 설정
+            </button>
+          </header>
+
+          {/* 프로필 설정 모달 */}
+          {showProfile && (
+            <div class="p-4 bg-white/90 backdrop-blur-md border-b border-sky-100 animate-fadeIn">
+              <h3 class="font-bold text-sky-700 text-sm mb-2">👤 내 프로필 설정</h3>
+              <input type="text" placeholder="닉네임 입력 (예: 태평이)" class="w-full text-sm p-2 rounded-xl border border-sky-200 mb-2 focus:outline-none focus:ring-2 focus:ring-sky-400" />
+              <button onClick={() => setShowProfile(false)} class="w-full bg-sky-500 text-white font-bold py-1.5 rounded-xl text-xs">저장하기</button>
+            </div>
+          )}
+
+          {/* 메인 콘텐츠 영역 */}
+          <main class="flex-1 p-4 space-y-4">
+            {activeTab === 'party' && (
+              <>
+                <div class="bg-white/70 backdrop-blur-md rounded-2xl p-4 border border-white/80 shadow-sm text-center">
+                  <p class="text-xs font-semibold text-sky-600 mb-1">🎉 열려있는 파티에 부담 없이 참여하세요!</p>
+                  <p class="text-xs text-slate-500">누구나 가볍게 참가 버튼을 누르고 현장을 방문할 수 있습니다.</p>
+                </div>
+
+                {parties.map(p => (
+                  <div key={p.id} class="bg-white/80 backdrop-blur-lg rounded-2xl p-5 border border-white shadow-md space-y-3">
+                    <div class="flex justify-between items-start">
+                      <span class="text-[11px] font-bold px-2.5 py-1 bg-sky-100 text-sky-700 rounded-full">{p.tag}</span>
+                      <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">인원: {p.members}</span>
+                    </div>
+
+                    <h2 class="font-bold text-slate-800 text-base">{p.title}</h2>
+                    <p class="text-xs text-slate-600 leading-relaxed">{p.desc}</p>
+
+                    <div class="text-xs text-slate-500 space-y-1 bg-sky-50/50 p-2.5 rounded-xl">
+                      <p>📍 {p.location}</p>
+                      <p>⏰ {p.time}</p>
+                    </div>
+
+                    <div class="flex gap-2 pt-1">
+                      <button 
+                        onClick={() => setSelectedNavMap(p.location)}
+                        class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1">
+                        🗺️ 길찾기
+                      </button>
+                      <button 
+                        onClick={() => alert('참가 신청이 완료되었습니다!')}
+                        class="flex-1 bg-gradient-to-r from-sky-400 to-emerald-400 hover:from-sky-500 hover:to-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs shadow transition">
+                        참가하기
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+
+            {activeTab === 'status' && (
+              <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-5 border border-white shadow-md text-center space-y-3">
+                <h2 class="font-bold text-slate-800 text-sm">📋 내 참가현황</h2>
+                <p class="text-xs text-slate-500">현재 참가 중인 파티가 없습니다.</p>
+              </div>
+            )}
+          </main>
+
+          {/* 길찾기 팝업 모달 */}
+          {selectedNavMap && (
+            <div class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end justify-center z-50 p-4">
+              <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 animate-slideUp">
+                <h3 class="font-bold text-slate-800 text-sm">🗺️ 지도 앱으로 길찾기</h3>
+                <p class="text-xs text-slate-600">{selectedNavMap}</p>
+                <div class="grid grid-cols-2 gap-2">
+                  <a href={`https://map.naver.com/v5/search/${encodeURIComponent(selectedNavMap)}`} target="_blank" class="bg-green-500 text-white text-center font-bold py-3 rounded-2xl text-xs">네이버 지도</a>
+                  <a href={`https://map.kakao.com/link/search/${encodeURIComponent(selectedNavMap)}`} target="_blank" class="bg-yellow-400 text-slate-900 text-center font-bold py-3 rounded-2xl text-xs">카카오맵</a>
+                </div>
+                <button onClick={() => setSelectedNavMap(null)} class="w-full bg-slate-100 text-slate-600 font-bold py-2.5 rounded-2xl text-xs">닫기</button>
+              </div>
+            </div>
+          )}
+
+          {/* 하단 탭 바 */}
+          <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/80 backdrop-blur-md border-t border-white/80 flex justify-around py-2.5 px-6 shadow-lg z-10">
+            <button 
+              onClick={() => setActiveTab('party')} 
+              class={`flex flex-col items-center gap-1 ${activeTab === 'party' ? 'text-sky-600 font-bold' : 'text-slate-400'}`}>
+              <span class="text-lg">🎉</span>
+              <span class="text-[10px]">파티 목록</span>
+            </button>
+            <button 
+              onClick={() => setActiveTab('status')} 
+              class={`flex flex-col items-center gap-1 ${activeTab === 'status' ? 'text-sky-600 font-bold' : 'text-slate-400'}`}>
+              <span class="text-lg">📋</span>
+              <span class="text-[10px]">참가현황</span>
+            </button>
+          </nav>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
 </body>
 </html>
